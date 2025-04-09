@@ -16,7 +16,7 @@
         const output = document.getElementById("output");
         if (!output) throw new Error("Missing elements!");
         let props = {
-          isTrusted: e.isTrusted ? "✅" : "❌",
+          isTrusted: e.isTrusted,
         };
 
         const modifiers = [];
