@@ -62,6 +62,8 @@
         if (!element) throw new Error("Missing elements!");
 
         element.addEventListener("change", logEvent);
+        element.addEventListener("focus", logEvent);
+        element.addEventListener("blur", logEvent);
         element.addEventListener("keydown", logEvent);
         element.addEventListener("keypress", logEvent);
         element.addEventListener("keyup", logEvent);
