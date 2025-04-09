@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Automation Tests</title>
+  </head>
+  <body>
+    <span>Test 1:</span>
+    <input type="text" id="input1" />
+    <button id="button1">Test 2</button><br />
+    <hr />
+    <pre id="output"></pre>
+    <hr />
+    <script>
+      const logs = [];
+      const logEvent = (e) => {
+        const output = document.getElementById("output");
+        if (!output) throw new Error("Missing elements!");
+        let props = {
+          isTrusted: e.isTrusted ? "✅" : "❌",
+        };
+
+        const modifiers = [];
+        if (e.altKey) modifiers.push("alt");
+        if (e.ctrlKey) modifiers.push("ctrl");
+        if (e.metaKey) modifiers.push("meta");
+        if (e.shiftKey) modifiers.push("shift");
+
+        if (modifiers.length > 0) {
+          props.modifiers = modifiers.join(" + ");
+        }
+
+        if (e.code != null) {
+          props.code = e.code;
+        }
+
+        if (e.button != null) {
+          props.button = e.button;
+        }
+
+        logs.unshift(
+          `${e.constructor.name}[${e.type}] ${Object.entries(props)
+            .filter(([_key, value]) => value != null)
+            .map(([key, value]) => `${key}=${value}`)
+            .join(" ")}`
+        );
+
+        if (logs.length > 50) {
+          logs.length = 50;
+        }
+
+        output.innerText = logs.join("\n");
+      };
+
+      try {
+        setupEvents(document.getElementById("input1"));
+        setupEvents(document.getElementById("button1"));
+      } catch (e) {
+        console.error("fatal script error", e);
+      }
+
+      function setupEvents(element) {
+        if (!element) throw new Error("Missing elements!");
+
+        element.addEventListener("change", logEvent);
+        element.addEventListener("keydown", logEvent);
+        element.addEventListener("keypress", logEvent);
+        element.addEventListener("keyup", logEvent);
+        element.addEventListener("click", logEvent);
+        element.addEventListener("mousedown", logEvent);
+        element.addEventListener("mouseup", logEvent);
+      }
+    </script>
+  </body>
+</html>
